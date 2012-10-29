@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>JBreadCrumbs | JQuery Plugin</title>
+		<link href="css/qunit-1.10.0.css" rel='stylesheet' type='text/css' />
+		<script type='text/javascript' src="js/jquery.min.js"></script>
+		<script type='text/javascript' src="js/qunit-1.10.0.js"></script>
+		<script type='text/javascript' src="js/jbreadcrumbs.js"></script>
+	</head>
+	<body>
+  		<div id="qunit"></div>
+		<script type='text/javascript'>
+			function getKey(){
+				var qstring = location.search.substr(1),
+					items = qstring.split("&");
+				
+				for(var n=0;n<items.length;n++){
+					var item = items[n].split("="),
+						name = item[0],
+						value = item[1];
+					
+					if(name === "key")
+						return value;
+				}
+				
+				return undefined;
+			}
+			
+			$(function(){
+				var apikey = getKey();
+				
+				console.log("key => ", apikey);
+				
+				if(apikey === undefined)
+					return;
+				
+			});
+		</script>
+	</body>
+</html>
