@@ -22,38 +22,56 @@
 							debug: false, 
 							crumb: undefined,
 							data: undefined,
-							crumbClicked: function(crumb){}
+							crumbClicked: function(crumb){},
+							linkStyle:[
+							           "margin-left:10px",
+							           "margin-right:10px",
+							           "display:inline-block",
+							           "text-decoration:none"
+							]
 						}, options);
 		
 		var priv={
+				/**
+				 * Adds a new Crumb to the selected element
+				 * 
+				 * @param sender The html element to add the crumb to.
+				 * @param crumb The crumb text value to add to the sender.
+				 */
 				addCrumb: function(sender, crumb){
 					if(sender.find("#bc"+crumb).length <= 0){
-						sender.append("<a id='bc"+crumb+"' class='breadCrumb' href='#' crumb='"+crumb+"'>"+crumb+"</a>");
+						sender.append("<a id='bc"+crumb+"' class='breadCrumb' href='#' crumb='"+crumb+"' style='"+settings.linkStyle.join(";")+"'>"+crumb+"</a>");
 						
-						sender.find("#bc"+fc).click(function(){
+						sender.find("#bc"+crumb).click(function(){
 							settings.crumbClicked.apply(sender, [crumb]);
 						});
 					}
 				}
 		},
 		methods={
+			/**
+			 * Extracts the first character, capitalizes it and adds it as a new crumb.
+			 */
 			firstChar: function(){
 				var $this = $(this);
-				
+								
 				$this.empty();
 				
-				for(var n;n<settings.data.length;n++){
+				for(var n=0;n<settings.data.length;n++){
 					if(settings.data[n][settings.crumb] != null){
 						priv.addCrumb($this, settings.data[n][settings.crumb][0].toUpperCase());
 					}
 				}
 			},
+			/**
+			 * Adds the whole word given by settings.crumb as a crumb to the select item(s)
+			 */
 			wholeWord: function(){
 				var $this = $(this);
 				
 				$this.empty();
 				
-				for(var n;n<settings.data.length;n++){
+				for(var n=0;n<settings.data.length;n++){
 					if(settings.data[n][settings.crumb] != null){
 						priv.addCrumb($this, settings.data[n][settings.crumb]);
 					}
@@ -64,6 +82,12 @@
 		return $(this).each(function(){
 			if(typeof options === "object"){
 				if(methods[settings.mode] && $.isArray(settings.data) && settings.crumb != null){
+					
+					$(this).data(settings);
+					
+					if(!$.isArray(settings.linkStyle))
+						settings.linkStyle = $.makeArray(settings.linkStyle);
+					
 					methods[settings.mode].apply(this, []);
 				}
 			}
